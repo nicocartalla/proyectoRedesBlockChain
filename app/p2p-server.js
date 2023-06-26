@@ -1,6 +1,7 @@
-// 11
 const Websocket = require("ws");
-
+const HttpProxyAgent = require('http-proxy-agent');
+var proxy = 'http://127.0.0.1:8080';
+var agent = new HttpProxyAgent.HttpProxyAgent(proxy);
 const P2P_PORT = process.env.P2P_PORT || 5001;
 const peers = process.env.PEERS ? process.env.PEERS.split(",") : [];
 const MESSAGE_TYPES = {
@@ -10,6 +11,7 @@ const MESSAGE_TYPES = {
 };
 
 class P2pServer {
+  
   constructor(blockchain, transactionPool) {
     this.blockchain = blockchain;
     this.transactionPool = transactionPool;
@@ -27,7 +29,7 @@ class P2pServer {
 
   connectToPeers() {
     peers.forEach(peer => {
-      const socket = new Websocket(peer);
+      const socket = new Websocket(peer, {agent: agent});
       socket.on("open", () => {
         this.connectSocket(socket);
       });

@@ -11,8 +11,11 @@ const TransactionPool = require("../wallet/transaction-pool");
 const Miner = require('./miner');
 
 const HTTP_PORT = process.env.HTTP_PORT || 3001;
-
+// use proxy 
+process.env["HTTP_PROXY"] = "http://127.0.0.1:8080";
+process.env["HTTPS_PROXY"] = "http://127.0.0.1:8080";
 const app = express();
+
 app.use(bodyParser.json());
 const bc = new Blockchain();
 const wallet = new Wallet();
